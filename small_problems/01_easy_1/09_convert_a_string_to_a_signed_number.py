@@ -14,8 +14,6 @@
 
     # remove sign from string
         # set clean_string w/ string that has + or - stripped
-        # set sign w/ '+' or '-'
-            # sign = string[0]
     # convert string to integer
         # pass clean_string to helper function
     # compute integer as positive or negative
@@ -43,14 +41,14 @@ def string_to_integer(string):
     value = 0
     for char in string:
         value = (10 * value) + DIGITS[char]
-    
+
     return value
 
 def string_to_signed_integer(string):
     clean_string = string.lstrip('+-')
 
     integer = string_to_integer(clean_string)
-    
+
     match string[0]:
         case '-': return -integer
         case _: return integer
