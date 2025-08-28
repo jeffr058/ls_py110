@@ -22,6 +22,7 @@ dict1 = {'a': ['d', 'e'], 'b': ['f', 'g'], 'c': ['h', 'i']}
 # at the answer.
 dict2 = {'1st': {'d': 3}, '2nd': {'e': 2, 'f': 1}, '3rd': {'g': 0}}
 
+# My Answer
 print(lst1[2][1][3])
 print(lst2[1]['third'][0])
 print(lst3[2]['third'][0][0])
