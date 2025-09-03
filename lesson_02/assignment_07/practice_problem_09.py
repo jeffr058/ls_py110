@@ -20,9 +20,6 @@ lst = [
 #     if add_to_list:
 #         new_list.append(dictionary)
 
-lst1 = [1, 2, 3]
-lst2 = [4, 8, 12]
-
 def are_all_even(nums):
     return all([num % 2 == 0 for num in nums])
 
