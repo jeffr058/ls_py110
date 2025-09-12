@@ -1,77 +1,3 @@
-# PEDAC
-# Understand the Problem
-# Inputs:
-    # User starts the game, the deck of cards is initialized and shuffled, and dealer deals the cards
-    # Dealer deals the cards
-# Outputs:
-    # The result of three possible outcomes: Player wins, Dealer wins, or it's a tie; resulting from Player choosing specific actions based on the cards Player is dealt and the card shown in the Dealer's hand
-# Requirements:
-    # Card values:
-        # Cards 2-10 are worth their face values
-        # Jack, Queen, King are worth 10 each
-        # Ace is 1 or J depending on the total value of cards in hand when Ace is received
-    # Player always goes first
-    # Player can decide to "hit" or "stay"
-    # Player can "hit" as many times as he wants
-    # If total value exceeds 21 for either player, player "busts" and loses game
-    # The turn is over when the player "busts" or "stays"
-    # When the player "stays", it's the dealer's turn
-    # Dealer must hit until total is at least 17
-    # If dealer busts, player wins
-    # When the player and dealer both "stay", the values are compared for the highest value
-
-# Data Structure:
-    # Probably dictionary or list or some combinations of the two
-    # Option 1: a tuple or list of dictionaries
-        # Each dictionary represents a suit, keys are cards, values are values
-    # Option 2: a nested list (LS choice)
-        # inner lists are [suit, card_value] 
-
-# Algorithm:
-    # 1. Initialize deck of cards
-    # 2. Deal cards
-    # 3. Calculate total value
-    # 4. Check outcome
-        # If total value is 21
-            # If total value of Dealer cards is not 21, Player wins
-            # If total value of Dealer cards 21, it's a tie
-        # If total value is > 21, Player busts
-        # If total value is < 21, continue to step 5
-    # 5. Prompt Player to hit or stay
-        # If Player stays, break loop
-        # If Player hits
-            # Deal a card to Player
-        # Go to step 3
-    # Dealer's turn to hit or stay
-        # If value is < 17, Dealer hits until value is >= 17
-    # If Dealer busts, Player wins
-    # The card values are compared and winner determined
-    # Player chooses whether to play again
-
-# If hand includes Ace:
-            # Ace is 11 by default
-            # If sum w/ Ace is > 21, Ace becomes 1
-
-# Calculate total value:
-    # Given a hand of cards
-    # Compute the total value of all the cards
-        # Make a list of values
-        # Set sum w/ 0
-        # For each value in values, add the numeric value (from CARD_VALUES) to sum
-        # Determine how many Aces in cards
-            # While sum > 21 and more than one Ace in cards
-            # Subtract 10 from sum
-            # Subtract 1 from count of Aces
-        # Return sum
-
-# Deal cards:
-    # Set player_hand to empty list
-    # Set dealer_hand to empty list
-    # Alternate dealing to Player and Dealer for 4 total cards
-        # Take last card from deck and add to player_hand or dealer_hand
-    # Return player_hand and dealer_hand
-
-# Code:
 import random
 import os
 
@@ -97,12 +23,12 @@ def prompt(message):
     print(f'=> {message}')
 
 def initialize_deck():
-    deck = [[f'{string_value}', f'{suit}'] 
-            for string_value in STRING_VALUES 
+    deck = [[f'{string_value}', f'{suit}']
+            for string_value in STRING_VALUES
             for suit in SUITS]
-    
+
     random.shuffle(deck)
-    
+
     return deck
 
 def deal_cards(deck):
@@ -160,37 +86,39 @@ def display_winner(winner, player_total, dealer_total):
         print(f'{outcome} wins!')
 
 def display_hand(hand):
-        string_cards = [' of '.join(card) for card in hand]
-        
-        result = []
-        for string_card in string_cards:
-            result.append(f'[{string_card}]')
+    string_cards = [' of '.join(card) for card in hand]
 
-        print(' '.join(result))
+    result = []
+    for string_card in string_cards:
+        result.append(f'[{string_card}]')
+
+    print(' '.join(result))
 
 def display_table(dealer_hand, player_hand, dealer_total, player_total, turn):
     os.system('clear')
     dealer_show_one = total_value([dealer_hand[0]])
-    
+
     if turn == 'player':
         prompt('Dealer:')
         print(f'[{dealer_hand[0][0]} of {dealer_hand[0][1]}] [? of ?]')
         print()
-        
+
         prompt('Player:')
         display_hand(player_hand)
         print()
 
-        print(f'Dealer shows: {dealer_show_one}. Player total: {player_total}.')
+        print(f'Dealer shows: {dealer_show_one}. '
+              f'Player total: {player_total}.')
+
     elif turn == 'dealer':
         prompt('Dealer:')
         display_hand(dealer_hand)
         print()
-        
-        prompt(f'Player:')
+
+        prompt('Player:')
         display_hand(player_hand)
         print()
-        
+
         print(f'Dealer total: {dealer_total}. Player total: {player_total}.')
 
     print('----------')
@@ -198,22 +126,26 @@ def display_table(dealer_hand, player_hand, dealer_total, player_total, turn):
 def play_again():
     prompt('Play again? (y)es or (n)o')
     while True:
-        play_again = input().strip().lower()
-        if play_again not in ['y', 'n']:
+        play_again_input = input().strip().lower()
+        if play_again_input not in ['y', 'n']:
             prompt('Invalid input. Play again? (y)es or (n)o')
         else:
-            return True if play_again == 'y' else False
-    
+            return True if play_again_input == 'y' else False
+
 def play_twenty_one():
     deck = initialize_deck()
-    round = 1
+    game_round = 1
     while True:
         player_hand, dealer_hand = deal_cards(deck)
         player_total = total_value(player_hand)
         dealer_total = total_value(dealer_hand)
 
         turn = 'player'
-        display_table(dealer_hand, player_hand, dealer_total, player_total, turn)
+        display_table(dealer_hand,
+                      player_hand,
+                      dealer_total,
+                      player_total,
+                      turn,)
 
         while True:
             if player_total == 21:
@@ -229,15 +161,15 @@ def play_twenty_one():
                 elif player_action == 'h':
                     player_total = total_value(hit(player_hand, deck))
 
-                    display_table(dealer_hand, 
-                                  player_hand, 
-                                  dealer_total, 
-                                  player_total, 
+                    display_table(dealer_hand,
+                                  player_hand,
+                                  dealer_total,
+                                  player_total,
                                   turn,)
 
         while True:
             turn = 'dealer'
-            
+
             display_table(dealer_hand,
                           player_hand,
                           dealer_total,
@@ -248,30 +180,30 @@ def play_twenty_one():
                 break
             else:
                 dealer_total = total_value(hit(dealer_hand, deck))
-                
-                display_table(dealer_hand, 
-                              player_hand, 
-                              dealer_total, 
-                              player_total, 
+
+                display_table(dealer_hand,
+                              player_hand,
+                              dealer_total,
+                              player_total,
                               turn,)
 
                 if busted(dealer_total):
                     print('Dealer busts!')
                     break
-        
+
         winner = determine_outcome(player_total, dealer_total)
         display_winner(winner, player_total, dealer_total)
 
         if not play_again():
             break
-        
-        if round == 4:
+
+        if game_round == 4:
             initialize_deck()
             prompt('Reshuffling deck...')
             input('Press (ENTER) to continue.')
-            round = 1
+            game_round = 1
         else:
-            round += 1
+            game_round += 1
 
     prompt('Thanks for playing!')
 
