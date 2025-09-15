@@ -14,10 +14,7 @@
     # Return the result
 # code:
 def reverse_number(integer):
-    string = str(integer)[::-1]
-    result = int(string)
-    
-    return result
+    return int(str(integer)[::-1])
 
 print(reverse_number(12345) == 54321)   # True
 print(reverse_number(12213) == 31221)   # True
