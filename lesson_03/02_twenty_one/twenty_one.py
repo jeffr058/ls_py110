@@ -60,14 +60,14 @@ def total_value(cards):
 def busted(total):
     return total > 21
 
-def hit(hand, deck):
+def add_hit_card(hand, deck):
     hand.append(deck.pop())
     return hand
 
-def determine_outcome(player_total, dealer_total):
-    if player_total > 21:
+def determine_outcome(player_total, dealer_total, who_busted):
+    if who_busted == 'Player':
         return 'Dealer'
-    elif dealer_total > 21:
+    elif who_busted == 'Dealer':
         return 'Player'
     elif player_total < dealer_total:
         return 'Dealer'
@@ -76,14 +76,17 @@ def determine_outcome(player_total, dealer_total):
     else:
         return 'tie'
 
-def display_winner(winner, player_total, dealer_total):
+def display_winner(winner, player_total, dealer_total, who_busted):
     outcome = winner
     print(f'Dealer has {dealer_total}. Player has {player_total}.')
+
+    if who_busted != 'No one':
+        print(f'{who_busted} busts. ', end='')
 
     if outcome == 'tie':
         print("It's a tie!")
     else:
-        print(f'{outcome} wins!')
+        print(f'{outcome} wins.')
 
 def display_hand(hand):
     string_cards = [' of '.join(card) for card in hand]
@@ -123,7 +126,18 @@ def display_table(dealer_hand, player_hand, dealer_total, player_total, turn):
 
     print('----------')
 
+def best_of_five(score, winner):
+    if winner in ['Dealer', 'Player']:
+        score[winner]+= 1
+        print(f'Dealer: {score['Dealer']}   Player: {score['Player']}')
+        if score[winner] == 3:
+            print()
+            print(f'*** {winner} wins the match! ***')
+            score.update({'Dealer': 0})
+            score.update({'Player': 0})
+
 def play_again():
+    print()
     prompt('Play again? (y)es or (n)o')
     while True:
         play_again_input = input().strip().lower()
@@ -132,15 +146,26 @@ def play_again():
         else:
             return True if play_again_input == 'y' else False
 
+def reset_deck(deck):
+    if len(deck) < 20:
+        deck = initialize_deck()
+        print()
+        prompt('Reshuffling deck...')
+        input('Press (ENTER) to continue.')
+
+    return deck
+
 def play_twenty_one():
     deck = initialize_deck()
-    game_round = 1
+    score = {'Player': 0, 'Dealer': 0}
+
     while True:
         player_hand, dealer_hand = deal_cards(deck)
         player_total = total_value(player_hand)
         dealer_total = total_value(dealer_hand)
 
         turn = 'player'
+        who_busted = 'No one'
         display_table(dealer_hand,
                       player_hand,
                       dealer_total,
@@ -151,21 +176,24 @@ def play_twenty_one():
             if player_total == 21:
                 break
             elif busted(player_total):
-                print('Player busts!')
+                who_busted = 'Player'
                 break
             else:
-                prompt('Will you (h)it or (s)tay? ')
+                prompt('Will you (h)it or (s)tay?')
                 player_action = input().strip().lower()
-                if player_action == 's':
+
+                if player_action not in ['h', 's']:
+                    prompt('Invalid input. Will you (h)it or (s)tay?')
+                elif player_action == 's':
                     break
                 elif player_action == 'h':
-                    player_total = total_value(hit(player_hand, deck))
+                    player_total = total_value(add_hit_card(player_hand, deck))
 
                     display_table(dealer_hand,
-                                  player_hand,
-                                  dealer_total,
-                                  player_total,
-                                  turn,)
+                                player_hand,
+                                dealer_total,
+                                player_total,
+                                turn,)
 
         while True:
             turn = 'dealer'
@@ -179,7 +207,7 @@ def play_twenty_one():
             if dealer_total >= 17 or player_total > 21:
                 break
             else:
-                dealer_total = total_value(hit(dealer_hand, deck))
+                dealer_total = total_value(add_hit_card(dealer_hand, deck))
 
                 display_table(dealer_hand,
                               player_hand,
@@ -188,22 +216,18 @@ def play_twenty_one():
                               turn,)
 
                 if busted(dealer_total):
-                    print('Dealer busts!')
+                    who_busted = 'Dealer'
                     break
 
-        winner = determine_outcome(player_total, dealer_total)
-        display_winner(winner, player_total, dealer_total)
+        winner = determine_outcome(player_total, dealer_total, who_busted)
+        display_winner(winner, player_total, dealer_total, who_busted)
+
+        best_of_five(score, winner)
 
         if not play_again():
             break
 
-        if game_round == 4:
-            initialize_deck()
-            prompt('Reshuffling deck...')
-            input('Press (ENTER) to continue.')
-            game_round = 1
-        else:
-            game_round += 1
+        deck = reset_deck(deck)
 
     prompt('Thanks for playing!')
 
