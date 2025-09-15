@@ -19,14 +19,8 @@
     # Return sequence
 # code:
 def sequence(count, starting_num):
-    sequence = []
-    running_multiple = starting_num
-    
-    for _ in range(count):
-        sequence.append(running_multiple)
-        running_multiple += starting_num
-
-    return sequence
+    sequence_lst = [starting_num * num for num in range(1, count + 1)]
+    return sequence_lst
 
 print(sequence(5, 1) == [1, 2, 3, 4, 5])          # True
 print(sequence(4, -7) == [-7, -14, -21, -28])     # True
