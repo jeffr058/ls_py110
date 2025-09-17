@@ -21,9 +21,12 @@ def multiply_items(list1, list2):
     #     new_list.append(list1[idx] * list2[idx])
     # return new_list
 
-    return [list1[idx] * list2[idx] 
-            for idx in range(len(list1))]
+    # return [list1[idx] * list2[idx] 
+    #         for idx in range(len(list1))]
+    zipped_list = list(zip(list1, list2))
+    return [pair[0] * pair[1] for pair in zipped_list]
 
 list_a = [1, 2, 3]
 list_b = [4, 5, 6]
 print(multiply_items(list_a, list_b) == [4, 10, 18]) # True
+# multiply_items(list_a, list_b)
