@@ -41,7 +41,7 @@ def rotate_rightmost_digits(number, count):
 def max_rotation(number):
     num_str_length = len(str(number))
 
-    for idx in range(num_str_length, 0, -1):
+    for idx in range(num_str_length, 1, -1):
         number = rotate_rightmost_digits(number, idx)
 
     return number
