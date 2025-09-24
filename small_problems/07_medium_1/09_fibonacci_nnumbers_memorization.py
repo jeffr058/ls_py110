@@ -13,16 +13,16 @@ algorithm:
 - Else FIB_DICT[n_minus_1] = fibonacci(n_minus_1)
 - Else FIB_DICT[n_minus_2] = fibonacci(n_minus_2)
 '''
-FIB_DICT = {1: 1, 2: 1}
+fib_dict = {}
 
 def fibonacci(n):
     if n <= 2:
         return 1
-
-    n_minus_1 = FIB_DICT.setdefault(n - 1, fibonacci(n - 1))
-    n_minus_2 = FIB_DICT.setdefault(n - 2, fibonacci(n - 2))
-
-    return n_minus_1 + n_minus_2
+    elif n in fib_dict:
+        return fib_dict[n]
+    else:
+        fib_dict[n] = fibonacci(n - 1) + fibonacci(n - 2)
+        return fib_dict[n]
 
 print(fibonacci(1) == 1)         # True
 print(fibonacci(2) == 1)         # True
