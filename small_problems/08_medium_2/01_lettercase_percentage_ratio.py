@@ -22,23 +22,28 @@ algorithm:
 - Add data into a dictionary `result`
 - Return `result`
 '''
+# 
+def percentage_string(count, total):
+    return f'{count / total * 100:.02f}'
+
 def letter_percentages(string):
     string_length = len(string)
-    lowercase = 0
-    uppercase = 0
-    neither = 0
+    lower_count = 0
+    upper_count = 0
+    neither_count = 0
     result = {}
+    
     for char in string:
-        if char.isalpha() and char.islower():
-            lowercase += 1
-        elif char.isalpha() and char.isupper():
-            uppercase += 1
+        if char.islower():
+            lower_count += 1
+        elif char.isupper():
+            upper_count += 1
         else:
-            neither += 1
+            neither_count += 1
 
-    result['lowercase'] = f'{lowercase / string_length * 100:.02f}'
-    result['uppercase'] = f'{uppercase / string_length * 100:.02f}'
-    result['neither'] = f'{neither / string_length * 100:.02f}'
+    result['lowercase'] = percentage_string(lower_count, string_length)
+    result['uppercase'] = percentage_string(upper_count, string_length)
+    result['neither'] = percentage_string(neither_count, string_length)
 
     return result
 
