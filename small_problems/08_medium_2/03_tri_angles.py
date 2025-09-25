@@ -28,8 +28,9 @@ algorithm:
 '''
 def triangle(angle1, angle2, angle3):
     angles = [angle1, angle2, angle3]
-
-    if sum(angles) != 180 or 0 in angles:
+    
+    if sum(angles) != 180 or [angle for angle in angles if angle <= 0]:
+        print([angle for angle in angles if angle <= 0])
         return 'invalid'
     
     if 90 in angles:
