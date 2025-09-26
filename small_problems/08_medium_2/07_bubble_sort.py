@@ -49,17 +49,11 @@ def bubble_sort(lst):
     while is_swap:
         is_swap = False
         
-        for idx, num in enumerate(lst):
-            if idx == len(lst) - 1:
-                break
-            
+        for idx in range(len(lst) - 1):
             if lst[idx] > lst[idx + 1]:
                 lst[idx], lst[idx + 1] = lst[idx + 1], lst[idx]
                 is_swap = True
-    
-    return lst
 
-# print(bubble_sort([3, 2, 5, 4, 1]))
 # Examples
 lst1 = [5, 3]
 bubble_sort(lst1)
