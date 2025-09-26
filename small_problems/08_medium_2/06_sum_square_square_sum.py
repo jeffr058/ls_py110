@@ -22,11 +22,8 @@ Algorithm:
 - Square each integer and get the sum
 - Get the difference and return the result
 '''
-def get_first_count_integers(integer):
-    return list(range(1, integer + 1))
-
 def sum_square_difference(integer):
-    first_count_integers = get_first_count_integers(integer)
+    first_count_integers = range(1, integer + 1)
 
     sum_square = sum(first_count_integers) ** 2
     
