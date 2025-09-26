@@ -40,15 +40,14 @@ def is_featured(next_num):
     return False
 
 def next_featured(num):
-    if num >= 9876543201:
-        return ("There is no possible number that "
-                "fulfills those requirements.")
-    
     next_num = num + 1
-    while True:
+    while next_num <= 9876543201:
         if is_featured(next_num):
             return next_num
         next_num += 1
+
+    return ("There is no possible number that "
+            "fulfills those requirements.")
 
 print(next_featured(12) == 21)                  # True
 print(next_featured(20) == 21)                  # True
